@@ -20,6 +20,7 @@ registerCommand({
         await executeCommand('Workspace.setUri', 'bash-demo:///workspace')
         await executeCommand('Layout.showMain')
         await executeCommand('Layout.showPanel', 'Terminals', 'bash-demo:///workspace')
+        await executeCommand('Main.closeAllEditors')
         await executeCommand('Main.openUri', 'bash-demo:///workspace/README.md')
       })().catch((error) => showNotification('error', String(error)))
     }, 0)
