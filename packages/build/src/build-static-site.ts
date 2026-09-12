@@ -24,6 +24,8 @@ const { commitHash } = await sharedProcess.exportStatic({
 const settingsPath = join(root, 'dist', commitHash, 'config', 'defaultSettings.json')
 const settings = JSON.parse(await readFile(settingsPath, 'utf8'))
 settings['application.useOnLoadJson'] = true
+// A demo workspace is ephemeral: do not restore its terminal before the extension starts.
+settings['workbench.saveStateOnVisibilityChange'] = false
 await writeFile(settingsPath, JSON.stringify(settings, null, 2))
 
 const extensionId = 'builtin.bash-web-demo'
