@@ -1,0 +1,21 @@
+{
+  "name": "@lvce-editor/bash-web-demo",
+  "version": "0.0.0-dev",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node packages/build/src/build-extension.ts && node packages/build/src/build-static-site.ts",
+    "test": "node --test packages/extension/test/*.test.ts",
+    "e2e:headless": "node packages/e2e/static-site.ts"
+  },
+  "dependencies": {
+    "@lvce-editor/api": "9.32.0",
+    "@lvce-editor/server": "0.115.3",
+    "fflate": "0.8.3",
+    "just-bash": "3.4.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "esbuild": "0.28.2"
+  }
+}

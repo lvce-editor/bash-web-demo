@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  pull_request: {}
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: 0
+      - run: npm run e2e:headless
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: 0
+      - name: Configure GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v6
+      - name: Upload static demo
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: .tmp/static
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: ci
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish static demo
+        id: deployment
+        uses: actions/deploy-pages@v5

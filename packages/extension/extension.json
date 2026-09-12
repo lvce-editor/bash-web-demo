@@ -1,0 +1,17 @@
+{
+  "id": "builtin.bash-web-demo",
+  "name": "Browser Bash",
+  "description": "A browser shell with a shared editor filesystem, powered by just-bash",
+  "browser": "dist/extensionMain.js",
+  "isolated": true,
+  "preserveRuntimeOnWorkspaceChange": true,
+  "contentSecurityPolicy": ["default-src 'none'", "script-src 'self'", "connect-src 'self'"],
+  "activation": ["onCommand:bashDemo.open", "onCommand:bashDemo.connect", "onCommand:bashDemo.request", "onFileSystem:bash-demo"],
+  "commands": [
+    { "id": "bashDemo.open", "label": "Browser Bash: Open Demo" },
+    { "id": "bashDemo.connect", "internal": true },
+    { "id": "bashDemo.request", "internal": true }
+  ],
+  "fileSystemProviders": [{ "id": "bash-demo" }],
+  "workspaceTransport": { "scheme": "bash-demo", "command": "bashDemo.connect", "requestCommand": "bashDemo.request" }
+}
