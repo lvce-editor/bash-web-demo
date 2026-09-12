@@ -17,9 +17,11 @@ registerCommand({
   execute: () => {
     setTimeout(() => {
       void (async () => {
+        await executeCommand('Layout.hideSideBar')
         await executeCommand('Workspace.setUri', 'bash-demo:///workspace')
         await executeCommand('Layout.showMain')
         await executeCommand('Layout.showPanel', 'Terminals', 'bash-demo:///workspace')
+        await executeCommand('Layout.showSideBar', 'Explorer', false)
         await executeCommand('Main.closeAllEditors')
         await executeCommand('Main.openUri', 'bash-demo:///workspace/README.md')
       })().catch((error) => showNotification('error', String(error)))
