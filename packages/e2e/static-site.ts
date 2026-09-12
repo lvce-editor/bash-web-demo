@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test'
-import { readFile } from 'node:fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http'
 import { extname, join, normalize, sep } from 'node:path'
 import { chromium } from 'playwright'
@@ -66,8 +66,8 @@ if (!address || typeof address === 'string') {
 }
 
 const browser = await chromium.launch({ headless: true })
+const page = await browser.newPage()
 try {
-  const page = await browser.newPage()
   page.setDefaultTimeout(15_000)
   const url = `http://127.0.0.1:${address.port}${pathPrefix}/`
   const terminal = page.locator('.xterm-helper-textarea')
@@ -103,6 +103,10 @@ try {
   await expect(terminal).toBeVisible()
   await expect(page.getByRole('treeitem', { name: 'result.txt', exact: true })).toHaveCount(0)
   if (errors.length) throw new Error(errors.join('\n'))
+} catch (error) {
+  await page.screenshot({ path: '.tmp/failure.png' })
+  await writeFile('.tmp/failure.txt', await page.locator('body').ariaSnapshot())
+  throw error
 } finally {
   await browser.close()
   server.close()
