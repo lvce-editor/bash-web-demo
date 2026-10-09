@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@lvce-editor/api": "9.32.0",
-    "@lvce-editor/server": "0.115.3",
+    "@lvce-editor/server": "0.121.6",
     "fflate": "0.8.3",
     "just-bash": "3.4.2"
   },
